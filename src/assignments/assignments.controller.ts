@@ -2,23 +2,25 @@ import { Controller, Get, Param } from '@nestjs/common';
 
 @Controller('assignments')
 export class AssignmentsController {
-    @Get('prime/:n')
-    getPrime(@Param('n') n: number): string {
-        if (isNaN(n) || n < 1) {
-            return 'You must provide a positive integer';
+    @Get('fibonacci/:n')
+    fibonacci(@Param('n') n: string): { sequence: number[] } {
+        const num = parseInt(n, 10);
+
+        if (isNaN(num) || num <= 0) {
+            throw new Error('Parameter should be a positive integer.');
         }
 
-        function isPrime(num: number): boolean {
-            for (let i = 2; i < num; i++) {
-                if (num % i === 0) {
-                    return false;
-                }
-            }
-            return num > 1;
+        const fiboseq = [];
+
+        let a = 0, b = 1, temp;
+
+        for (let i = 0; i < num; i++) {
+            fiboseq.push(a);
+            temp = a;
+            a = b;
+            b = temp + b;
         }
-        
-        return JSON.stringify({
-            isPrime: isPrime(n),
-        });
+
+        return { sequence: fiboseq };
     }
 }
